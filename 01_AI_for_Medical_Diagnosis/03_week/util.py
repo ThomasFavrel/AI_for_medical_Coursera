@@ -17,7 +17,7 @@ from keras.layers import (
     UpSampling3D,
 )
 from keras.layers.merge import concatenate
-from tensorflow.keras.optimizers import Adam
+from tensorflow.python.keras.optimizer_v2.adam import Adam
 from tensorflow.keras.utils import to_categorical
 from tensorflow.compat.v1.logging import INFO, set_verbosity
 
@@ -171,14 +171,14 @@ def unet_model_3d(loss_function, input_shape=(4, 160, 160, 16),
         up_convolution = get_up_convolution(pool_size=pool_size,
                                             deconvolution=deconvolution,
                                             n_filters=
-                                            current_layer._keras_shape[1])(
+                                            current_layer.shape[1])(
             current_layer)
         concat = concatenate([up_convolution, levels[layer_depth][1]], axis=1)
         current_layer = create_convolution_block(
-            n_filters=levels[layer_depth][1]._keras_shape[1],
+            n_filters=levels[layer_depth][1].shape[1],
             input_layer=concat, batch_normalization=batch_normalization)
         current_layer = create_convolution_block(
-            n_filters=levels[layer_depth][1]._keras_shape[1],
+            n_filters=levels[layer_depth][1].shape[1],
             input_layer=current_layer,
             batch_normalization=batch_normalization)
 
